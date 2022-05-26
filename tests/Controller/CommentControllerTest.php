@@ -8,6 +8,7 @@ use App\Controller\CommentController;
 use App\Entity\Comment;
 use App\Entity\Review;
 use Doctrine\ORM\EntityManager;
+use GuzzleHttp\Psr7\Response;
 use Symfony\Component\HttpFoundation\Request;
 use PHPUnit\Framework\TestCase;
 
@@ -15,15 +16,9 @@ class CommentControllerTest extends TestCase
 {
     private CommentController $controller;
 
-    private Request $request;
-
-    private Review $review;
-
     public function setUp() : void
     {
         $this->controller = $this->getMockBuilder(CommentController::class)->disableOriginalConstructor()->getMock();
-        $this->request = new Request();
-        $this->review = new Review();
     }
 
     public function testIndexResponseNotNull() : void
@@ -34,7 +29,7 @@ class CommentControllerTest extends TestCase
 
     public function testNewResponseNotNull() : void
     {
-        $response = $this->controller->new($this->request, $this->review);
+        $response = $this->controller->new(new Request(), new Review());
         $this->assertNotNull($response);
     }
 
@@ -46,6 +41,7 @@ class CommentControllerTest extends TestCase
 
     public function testNewCommentNotEmpty() : void
     {
+        // $comment = $this->createMock(Comment::class);
         $em = $this->createMock(EntityManager::class);
         $em->expects($this->any())
         ->method('persist')

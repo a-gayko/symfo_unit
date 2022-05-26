@@ -19,6 +19,7 @@ class ReviewControllerTest extends TestCase
         $this->controller = $this->getMockBuilder(ReviewController::class)->disableOriginalConstructor()->getMock();
     }
 
+
     public function testIndexResponseNotNull() : void
     {
         $response = $this->controller->index();

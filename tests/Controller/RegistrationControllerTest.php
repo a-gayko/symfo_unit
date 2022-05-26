@@ -4,9 +4,7 @@ declare(strict_types=1);
 
 namespace App\Tests\Controller;
 
-use App\Controller\RegistrationController;
 use App\Entity\User;
-use App\Repository\UserRepository;
 use Doctrine\ORM\EntityManager;
 use App\Security\EmailVerifier;
 use Symfony\Component\HttpFoundation\Request;
@@ -21,7 +19,7 @@ class RegistrationControllerTest extends TestCase
         $this->user = new User();
     }
 
-    public function testRegisterUserNotNull() : void
+    public function testRegisterUserNotEmpty() : void
     {
         $em = $this->createMock(EntityManager::class);
         $em->expects($this->any())
@@ -39,11 +37,4 @@ class RegistrationControllerTest extends TestCase
         ->with($this->equalTo($request), $this->equalTo($this->user));
         $this->assertNotNull($emailVerifier);
     }
-
-    // public function testAny() : void
-    // {
-    //     $controller = new RegistrationController($this->createMock(EmailVerifier::class));
-    //     $response = $controller->verifyUserEmail(new Request(), $this->createMock(UserRepository::class));
-    //     $this->assertEquals(200, $response->getStatusCode());
-    // }
 }
