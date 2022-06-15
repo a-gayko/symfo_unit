@@ -8,9 +8,9 @@ use App\Entity\Review;
 use App\Controller\ReviewController;
 use Doctrine\ORM\EntityManager;
 use Symfony\Component\HttpFoundation\Request;
-use PHPUnit\Framework\TestCase;
+use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 
-class ReviewControllerTest extends TestCase
+class ReviewControllerTest extends WebTestCase
 {
     private ReviewController $controller;
 
@@ -46,5 +46,28 @@ class ReviewControllerTest extends TestCase
         ->method('persist')
         ->with($this->equalTo(new Review()));
         $this->assertNotEmpty($em);
+    }
+
+    /**
+     * @dataProvider urlProvider
+     */
+    public function testPageIsSuccessful($url)
+    {
+        $client = self::createClient();
+        $client->request('GET', $url);
+
+        // $this->assertResponseIsSuccessful();
+        $this->assertTrue($client->getResponse()->isSuccessful());
+    }
+
+    public function urlProvider()
+    {
+        return [
+            ['/en/review'],
+            ['/en/review/4'],
+            ['/en/review/user/create'],
+            ['/en/review/user/update/2'],
+            ['/en/review/user/delete/2'],
+        ];
     }
 }

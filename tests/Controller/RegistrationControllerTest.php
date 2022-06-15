@@ -8,9 +8,9 @@ use App\Entity\User;
 use Doctrine\ORM\EntityManager;
 use App\Security\EmailVerifier;
 use Symfony\Component\HttpFoundation\Request;
-use PHPUnit\Framework\TestCase;
+use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 
-class RegistrationControllerTest extends TestCase
+class RegistrationControllerTest extends WebTestCase
 {
     private User $user;
 
@@ -36,5 +36,25 @@ class RegistrationControllerTest extends TestCase
         ->method('handleEmailConfirmation')
         ->with($this->equalTo($request), $this->equalTo($this->user));
         $this->assertNotNull($emailVerifier);
+    }
+
+    /**
+     * @dataProvider urlProvider
+     */
+    public function testPageIsSuccessful($url)
+    {
+        $client = self::createClient();
+        $client->request('GET', $url);
+
+        // $this->assertResponseIsSuccessful();
+        $this->assertTrue($client->getResponse()->isSuccessful());
+    }
+
+    public function urlProvider()
+    {
+        return [
+            ['/en/register'],
+            ['/en/verify/email'],
+        ];
     }
 }

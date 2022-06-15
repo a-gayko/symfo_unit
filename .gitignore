@@ -2,6 +2,7 @@
 ###> symfony/framework-bundle ###
 /.vscode
 /.idea
+/.env.test
 /.env.local
 /.env.local.php
 /.env.*.local

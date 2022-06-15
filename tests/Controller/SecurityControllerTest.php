@@ -5,9 +5,9 @@ declare(strict_types=1);
 namespace App\Tests\Controller;
 
 use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
-use PHPUnit\Framework\TestCase;
+use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 
-class SecurityControllerTest extends TestCase
+class SecurityControllerTest extends WebTestCase
 {
     private AuthenticationUtils $authenticationUtils;
 
@@ -27,5 +27,25 @@ class SecurityControllerTest extends TestCase
     {
         $this->authenticationUtils->expects($this->any())->method('getLastAuthenticationError');
         $this->assertNotEmpty($this->authenticationUtils);
+    }
+
+    /**
+     * @dataProvider urlProvider
+     */
+    public function testPageIsSuccessful($url)
+    {
+        $client = self::createClient();
+        $client->request('GET', $url);
+
+        // $this->assertResponseIsSuccessful();
+        $this->assertTrue($client->getResponse()->isSuccessful());
+    }
+
+    public function urlProvider()
+    {
+        return [
+            ['/en/login'],
+            ['/en/logout'],
+        ];
     }
 }

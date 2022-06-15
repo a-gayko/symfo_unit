@@ -8,11 +8,11 @@ use App\Controller\CommentController;
 use App\Entity\Comment;
 use App\Entity\Review;
 use Doctrine\ORM\EntityManager;
-use GuzzleHttp\Psr7\Response;
 use Symfony\Component\HttpFoundation\Request;
-use PHPUnit\Framework\TestCase;
+use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 
-class CommentControllerTest extends TestCase
+
+class CommentControllerTest extends WebTestCase
 {
     private CommentController $controller;
 
@@ -33,12 +33,6 @@ class CommentControllerTest extends TestCase
         $this->assertNotNull($response);
     }
 
-    // public function testIndexStatusCode() : void
-    // {
-    //     $response = $this->controller->new($this->request, $this->review);
-    //     $this->assertEquals(200, $response->getStatusCode());
-    // }
-
     public function testNewCommentNotEmpty() : void
     {
         // $comment = $this->createMock(Comment::class);
@@ -47,5 +41,27 @@ class CommentControllerTest extends TestCase
         ->method('persist')
         ->with($this->equalTo(new Comment()));
         $this->assertNotEmpty($em);
+    }
+
+    /**
+     * @dataProvider urlProvider
+     */
+    public function testPageIsSuccessful($url)
+    {
+        $client = self::createClient();
+        $client->request('GET', $url);
+
+        // $this->assertResponseIsSuccessful();
+        $this->assertTrue($client->getResponse()->isSuccessful());
+    }
+
+    public function urlProvider()
+    {
+        return [
+            ['/en/user/comment'],
+            ['/en/user/comment/new'],
+            ['/en/user/comment/4/edit'],
+            ['/en/user/comment/delete/4'],
+        ];
     }
 }

@@ -5,9 +5,9 @@ declare(strict_types=1);
 namespace App\Tests\Controller;
 
 use App\Controller\CategoryController;
-use PHPUnit\Framework\TestCase;
+use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 
-class CategoryControllerTest extends TestCase
+class CategoryControllerTest extends WebTestCase
 {
     private CategoryController $controller;
 
@@ -26,5 +26,25 @@ class CategoryControllerTest extends TestCase
     {
         $response = $this->controller->showCategory(23);
         $this->assertNotNull($response);
+    }
+
+    /**
+     * @dataProvider urlProvider
+     */
+    public function testPageIsSuccessful($url)
+    {
+        $client = self::createClient();
+        $client->request('GET', $url);
+
+        // $this->assertResponseIsSuccessful();
+        $this->assertTrue($client->getResponse()->isSuccessful());
+    }
+
+    public function urlProvider()
+    {
+        return [
+            ['/en/category'],
+            ['/en/category/4'],
+        ];
     }
 }
